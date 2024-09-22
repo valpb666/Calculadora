@@ -83,7 +83,7 @@ public class ConvertidorAPosFijo {
                     break;
                     
                     case '^':
-                        /*if(jerarquia < 3){
+                        if(jerarquia < 3){
                             operadores.push(cadenaInFijo.charAt(i));                 
                        } else {
                            if(!operadores.isEmpty()){
@@ -94,13 +94,6 @@ public class ConvertidorAPosFijo {
                        }
                        jerarquia = 3;
 
-*/
-                        while (!operadores.isEmpty() && operadores.peek() == '^') {
-        postfijo.append(operadores.pop());
-    }
-    operadores.push(cadenaInFijo.charAt(i));
-    jerarquia = 3;
-                    break;
 
                 }
                 
