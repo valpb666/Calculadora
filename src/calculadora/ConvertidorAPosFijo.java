@@ -6,9 +6,9 @@ package calculadoramatematica;
 
 /**
  *
- * @author Alejandro
+ * @author Alejandro Castillo
  */
-public class ConvertidorAPosFijo {
+public class ConvertidorAPostFijo {
 
     public String convierteAPostFijo(String cadenaInFijo){
         PilaADT<Character> operadores = new PilaA<>();
@@ -17,16 +17,17 @@ public class ConvertidorAPosFijo {
         boolean yaHayUnPunto = false;
         int jerarquia = 0;
         
-        while (i < cadenaInFijo.length()){
-            if(Character.isDigit(cadenaInFijo.charAt(i))){
+        while (i < cadenaInFijo.length() - 1){
+            if(Character.isDigit(cadenaInFijo.charAt(i)) && (Character.isDigit(cadenaInFijo.charAt(i+1)) || ".%".indexOf(cadenaInFijo.charAt(i+1)) != -1)){
                 postfijo.append(cadenaInFijo.charAt(i));
+            } else if(Character.isDigit(cadenaInFijo.charAt(i)) && "+-*/^()".indexOf(cadenaInFijo.charAt(i+1)) != -1){
+                postfijo.append(cadenaInFijo.charAt(i) + "_");
             } else if(cadenaInFijo.charAt(i) == '.' && !yaHayUnPunto){
                 postfijo.append(cadenaInFijo.charAt(i));
                 yaHayUnPunto = true;
             } else if(cadenaInFijo.charAt(i) == '%'){
                 postfijo.append(cadenaInFijo.charAt(i));
-            } else if("+-*/^".indexOf(cadenaInFijo.charAt(i)) != -1 && Character.isDigit(cadenaInFijo.charAt(i-1))){
-                postfijo.append('_'); // Agrega un separador para números
+            } else if("+-*/^".indexOf(cadenaInFijo.charAt(i)) != -1 && (Character.isDigit(cadenaInFijo.charAt(i-1)) || cadenaInFijo.charAt(i-1) == ')')){
                 yaHayUnPunto = false; // Resetea la bandera de punto decimal
                 switch(cadenaInFijo.charAt(i)){
                     
@@ -94,43 +95,46 @@ public class ConvertidorAPosFijo {
                        }
                        jerarquia = 3;
 
+                    break;
 
                 }
                 
-        } else if("()".indexOf(cadenaInFijo.charAt(i)) != -1){
-                switch(cadenaInFijo.charAt(i)){
-                    
-                     case '(':
-                        operadores.push(cadenaInFijo.charAt(i));
-                        jerarquia = 0;
-                    break;
-                     
-                    case ')':
-                        while(operadores.peek() != '('){
-                            postfijo.append(operadores.pop());
-                        }
-                        operadores.pop();
-                        if(operadores.isEmpty())
+            } else if("()".indexOf(cadenaInFijo.charAt(i)) != -1){
+                    switch(cadenaInFijo.charAt(i)){
+
+                        case '(':
+                            operadores.push(cadenaInFijo.charAt(i));
                             jerarquia = 0;
-                        else if(operadores.peek() == '+' || operadores.peek() == '-')
-                            jerarquia = 1;
-                        else if(operadores.peek() == '*' || operadores.peek() == '/')
-                            jerarquia = 2;
-                        else if(operadores.peek() == '^')
-                            jerarquia = 3;                        
-                        else if(operadores.peek() == '(')
-                            jerarquia = 0;
-                    break;
-                }
+                        break;
+
+                        case ')':
+                            while(operadores.peek() != '('){
+                                postfijo.append(operadores.pop());
+                            }
+                            operadores.pop();
+                            if(operadores.isEmpty())
+                                jerarquia = 0;
+                            else if(operadores.peek() == '+' || operadores.peek() == '-')
+                                jerarquia = 1;
+                            else if(operadores.peek() == '*' || operadores.peek() == '/')
+                                jerarquia = 2;
+                            else if(operadores.peek() == '^')
+                                jerarquia = 3;                        
+                            else if(operadores.peek() == '(')
+                                jerarquia = 0;
+                        break;
+                    }
+            }
+        i++;
         }
-    i++;
-    }
-    while(!operadores.isEmpty())
-        postfijo.append(operadores.pop());
-    
+        while(!operadores.isEmpty()){
+            if(operadores.peek() != '(')
+                postfijo.append(operadores.pop());
+            else
+                operadores.pop();
+        }
     return postfijo.toString();
     }
-    
     
     public static void main(String[] args) {
         ConvertidorAPosFijo convertidor = new ConvertidorAPosFijo();
