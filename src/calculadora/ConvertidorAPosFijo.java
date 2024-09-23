@@ -125,15 +125,18 @@ public class ConvertidorAPostFijo {
                         break;
                     }
             }
-        i++;
+           i++;
         }
+        if(Character.isDigit(cadenaInFijo.charAt(i)) || (".%".indexOf(cadenaInFijo.charAt(i)) != -1))
+            postfijo.append(cadenaInFijo.charAt(i) + "_");
+
         while(!operadores.isEmpty()){
             if(operadores.peek() != '(')
                 postfijo.append(operadores.pop());
             else
                 operadores.pop();
         }
-    return postfijo.toString();
+        return postfijo.toString();
     }
     
     public static void main(String[] args) {
