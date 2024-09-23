@@ -92,6 +92,7 @@ public class Calculadora {
     
         return digitoIzquierda && digitoDerecha;
     }
+    
     // Verifica que multiplicacion, division y potencia sean validos
     private boolean operadorValido(String expresion, int pos, boolean esDivision) {
         // Verificar que haya un dígito o paréntesis a la izquierda y derecha del operador
@@ -120,18 +121,15 @@ public class Calculadora {
         return validoDer && validoIzq;
     }
     
-    
     /*
     // Verifica que multiplicacion, division y potencia sean validos
     private boolean operadorValido1(String expresion, int pos, boolean esDivision) {
         // Verificar que haya un dígito o paréntesis a la izquierda y derecha del operador
         boolean validoIzq, validoDer;
      
-        
         validoIzq = pos > 0 && (Character.isDigit(expresion.charAt(pos - 1)) || expresion.charAt(pos - 1) == ')');
        
         validoDer = pos < expresion.length() - 1 && (Character.isDigit(expresion.charAt(pos + 1)) || expresion.charAt(pos + 1) == '(' );
-    
     
         // Si es una división, además de lo anterior, verificar si divide entre 0
         if (esDivision)  
@@ -149,15 +147,13 @@ public class Calculadora {
                             if(i<expresion.length())
                                 elemento=expresion.charAt(i);
                         }
-                        
-                                
                     }
-                    
                 }
             }
                            
         return validoIzq && validoDer;
     }
+    
     */
     /**
      * Método auxiliar para asignar el valor de los operadores y obtener una
@@ -169,6 +165,7 @@ public class Calculadora {
      * @param operador String
      * @return int valor asignado al operador
      */
+    
     private int jerarquia(String operador) {
         int jerarquia = 0;
         switch (operador) {
@@ -249,6 +246,5 @@ public class Calculadora {
         
         return pila.peek();
     }
-    
     
 }
