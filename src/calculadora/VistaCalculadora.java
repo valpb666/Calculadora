@@ -88,6 +88,42 @@ protected static boolean Error= false;
     getContentPane().add(panelBase, BorderLayout.CENTER);
     }
   private void funcionalidad() {
+       boton0.addActionListener((ActionEvent e) -> {
+        String texto = cuadroTexto.getText();
+        int pos = texto.length() - 1; // Comienza desde el último carácter
+    
+    if (texto.isEmpty()) { // Verifica si el cuadro de texto no está vacío
+        return;
+    }
+     if (texto.charAt(0) == '(' && texto.charAt(texto.length() - 1) == ')') {
+        // Agrega el "?" antes del paréntesis de apertura "("
+        cuadroTexto.setText("?" + texto);
+        Error = false;
+        return;
+    }
+    // Recorre el texto desde la derecha hasta encontrar un signo
+    while (pos >= 0) {
+        char caracterActual = texto.charAt(pos);
+        
+        // If: encuentra +, *, / o ^ y agrega "?" después del signo
+        if (caracterActual == '+' || caracterActual == '*' || caracterActual == '/' || caracterActual == '^') {
+            cuadroTexto.setText(texto.substring(0, pos + 1) + "?" + texto.substring(pos + 1));
+            Error = false;
+            return;
+        }
+        
+        // Else: encuentra - y reemplázalo por "?"
+        if (caracterActual == '-') {
+            cuadroTexto.setText(texto.substring(0, pos) + "?" + texto.substring(pos + 1));
+            Error = false;
+            return;
+        }
+        
+        pos--;
+    }
+    
+    // Si no se encuentra ningún signo, no se hace nada adicional
+});
        boton1.addActionListener((ActionEvent e) -> {
            cuadroTexto.setText("");
            Error = false; // Restablece el false para que no haya error 
