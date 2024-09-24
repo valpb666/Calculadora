@@ -26,6 +26,11 @@ private JButton boton13, boton14, boton15, boton16;
 private JButton boton17, boton18, boton19, boton20, boton21;
 private JTextField cuadroTexto;
 private Border bordeBase, bordeTexto;
+/*
+Si es true entonces hay error 
+Si es false no encontro error
+*/
+protected static boolean Error= false;
 
 // constructor de la GUI
  public VistaCalculadora(){
