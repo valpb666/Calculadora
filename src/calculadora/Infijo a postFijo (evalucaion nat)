@@ -45,6 +45,41 @@ public class InfijoAPosfijo {
         return jerarquia;
     }
 
+ /**
+	     * Método auxiliar para revisar si el String es operador
+	     *
+	     * @param c String
+	     * @return boolean <ul>
+	     * <li> true: si es un operador "+","-","*","/","^"
+	     * <li> false: si no es un operador
+	     * <ul>
+	     */
+
+	    private static boolean checarOperador(String c) {
+	        boolean resp = false;
+	        if (c.equals("+") || c.equals("-") || c.equals("*") || c.equals("/") || c.equals("^")) {
+	            resp = true;
+	        }
+	        return resp;
+	    }
+
+	    /**
+	     * Método auxiliar para revisar si el String es un paréntesis
+	     *
+	     * @param c String
+	     * @return boolean <ul>
+	     * <li> true: si el String es "(" o ")"
+	     * <li> false: si el String no es "(" o ")"
+	     * <ul>
+	     */
+	    private static boolean parentesis(String c) {
+	        boolean resp = false;
+	        if (c.equals("(") || c.equals(")")) {
+	            resp = true;
+	        }
+	        return resp;
+	    }
+
     /**
      * Método para convertir una expresión en String de infijo a postfijo
      *
