@@ -34,6 +34,7 @@ private Border bordeBase, bordeTexto;
     this.setLocationRelativeTo(null);
     this.setResizable(false); 
     this.personalizacion();
+    this.funcionalidad();
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     this.setVisible(true);
     }
@@ -81,6 +82,161 @@ private Border bordeBase, bordeTexto;
     getContentPane().add(panelTexto, BorderLayout.NORTH); 
     getContentPane().add(panelBase, BorderLayout.CENTER);
     }
- 
+  private void funcionalidad() {
+       boton1.addActionListener((ActionEvent e) -> {
+           cuadroTexto.setText("");
+           Error = false; // Restablece el false para que no haya error 
+           boton20.setEnabled(true);// Habilita el boton de calcular 
+        });
+       boton2.addActionListener((ActionEvent e) -> { //se elimina el ultimo caracter 
+           String p=cuadroTexto.getText().substring(0, cuadroTexto.getText().length()-1); 
+           cuadroTexto.setText(p);
+           Error= false; // Restablece
+        });
+       boton3.addActionListener((ActionEvent e) -> {
+           String p=cuadroTexto.getText();
+           cuadroTexto.setText(p+"^");
+           Error = false; // Restablece 
+        });
+       boton4.addActionListener((ActionEvent e) -> {
+           String p=cuadroTexto.getText();
+           cuadroTexto.setText(p+"*");
+           Error = false; // Restablece 
+        });
+       boton5.addActionListener((ActionEvent e) -> {
+           String p=cuadroTexto.getText();
+           cuadroTexto.setText(p+"7");
+           Error = false; // Restablece 
+        });
+       boton6.addActionListener((ActionEvent e) -> {
+           String p=cuadroTexto.getText();
+           cuadroTexto.setText(p+"8");
+           Error = false; // Restablece 
+        });
+       boton7.addActionListener((ActionEvent e) ->  { 
+           String p=cuadroTexto.getText(); 
+           cuadroTexto.setText(p+"9");
+           Error = false; // restablece
+       });
+       boton8.addActionListener((ActionEvent e) -> { 
+           String p=cuadroTexto.getText();
+           cuadroTexto.setText(p+"/");
+           Error= false; // Restablece
+       });
+       boton9.addActionListener((ActionEvent e) -> { 
+           String p=cuadroTexto.getText();
+           cuadroTexto.setText(p+"4"); 
+           Error = false; // Restablece
+       });
+       boton10.addActionListener((ActionEvent e) -> { 
+           String p=cuadroTexto.getText();
+           cuadroTexto.setText(p+"5"); 
+           Error= false; // Restablece
+       });
+       boton11.addActionListener((ActionEvent e) -> { 
+           String p=cuadroTexto.getText(); 
+           cuadroTexto.setText(p+"6"); 
+           Error = false; // Restablece
+       });
+       boton12.addActionListener((ActionEvent e) -> { 
+           String p=cuadroTexto.getText(); 
+           cuadroTexto.setText(p+"-"); 
+           Error = false; // Restablece
+       });
+       boton13.addActionListener((ActionEvent e) -> { 
+           String p=cuadroTexto.getText(); 
+           cuadroTexto.setText(p+"1");
+           Error = false; // Restablece
+       });
+
+       boton14.addActionListener((ActionEvent e) -> {
+           String p=cuadroTexto.getText();
+           cuadroTexto.setText(p+"2");
+           Error = false; // // Restablece la variable de control de error
+       });
+       boton15.addActionListener((ActionEvent e) -> {
+            String p=cuadroTexto.getText();
+            cuadroTexto.setText(p+"3");
+            Error = false;
+       });
+       boton16.addActionListener((ActionEvent e) -> { 
+           String p=cuadroTexto.getText();
+           cuadroTexto.setText(p+"+");
+           Error = false; // Restablece
+       });
+       boton17.addActionListener((ActionEvent e) -> { 
+           String p=cuadroTexto.getText();
+           cuadroTexto.setText(p+"0"); 
+           Error = false; // Restablece
+       });
+       boton18.addActionListener((ActionEvent e) -> {
+           String p=cuadroTexto.getText(); 
+           cuadroTexto.setText(p+"("); 
+           Error = false; // Restablece
+       });
+       boton19.addActionListener((ActionEvent e) -> { 
+           String p=cuadroTexto.getText();
+           cuadroTexto.setText(p+")"); 
+           Error = false; // Restablece
+       });
+       boton21.addActionListener((ActionEvent e) -> { 
+           String p=cuadroTexto.getText();
+           cuadroTexto.setText(p+"."); 
+           Error = false; // Restablece
+        });
+       boton20.addActionListener((ActionEvent e) -> {
+    String c = cuadroTexto.getText();
+    try {
+        // Convierte la expresión infija a postfijo
+        PilaADT<String> pilaPostfija = InfijoAPostfijo.conviertePostfijo(c); //clase que utilice junto con metodo solo para probar el codigo, manda solo syntax error
+
+        if (!Error) { // Verifica si no hay error de sintaxis
+            try {
+                // Evalúa la expresión postfija
+                double resultado = evaluarExp(pilaPostfija);
+
+                // Muestra el resultado en el cuadro de texto
+                cuadroTexto.setText(Double.toString(resultado));
+            } catch (Exception ex) {
+                Error = true; // Si ocurre un error durante la evaluación
+                cuadroTexto.setText("Syntax Error"); // Muestra un mensaje de error
+            }
+        } else {
+            cuadroTexto.setText("Syntax Error"); // Si hubo un error de sintaxis antes, muestra un mensaje de error
+        }
+    } catch (Exception ex) {
+        cuadroTexto.setText("Syntax Error");
+    }
+});
+	
+       cuadroTexto.getDocument().addDocumentListener(new DocumentListener() {
+    @Override
+    public void insertUpdate(DocumentEvent e) {
+        revisaError();
+    }
+
+    @Override
+    public void removeUpdate(DocumentEvent e) {
+        revisaError();
+    }
+    @Override
+    public void changedUpdate(DocumentEvent e) {
+         // se necesita la implementacion de este codigo 
+    }
+    
+    private void revisaError() {
+        String texto = cuadroTexto.getText(); 
+        if (texto.contains("Syntax Error")) {
+            System.out.println("Syntax Error.");
+            boton20.setEnabled(false); //quita la funcionalidad si existe un error al boton "="
+            }
+        } 
+    });
+
+ }  
+
+    private double evaluarExp(PilaADT<String> pilaPostfija) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
  }
  
