@@ -194,6 +194,7 @@ public class Calculadora {
         return jerarquia;
     }
     
+    
     private double evaluarExp(PilaADT<String> postfijo){ //Estamos asumiendo que la pila esta volteada, es decir si tenemos a*b asumimos que el postfijo esta así: * b a
         PilaADT<Double> pila = new PilaA<>();
         
@@ -226,8 +227,12 @@ public class Calculadora {
                         break;
                     }
                     case "/" -> {
+        
                         double digito1 = pila.pop();
                         double digito2 = pila.pop();
+                        if(digito2/digito1==0){
+                            new RuntimeException("Error: División entre cero");
+                        }else
                         pila.push(digito2/digito1);
                         break;
                     }
