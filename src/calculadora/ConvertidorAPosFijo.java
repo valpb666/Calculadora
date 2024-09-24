@@ -127,7 +127,6 @@ public class ConvertidorAPostFijo {
             }
            i++;
         }
-        //revisar que al encontrar un ? multiplique el numero por -1 para negativos
         if(Character.isDigit(cadenaInFijo.charAt(i)) || (".%".indexOf(cadenaInFijo.charAt(i)) != -1))
             postfijo.append(cadenaInFijo.charAt(i) + "_");
 
