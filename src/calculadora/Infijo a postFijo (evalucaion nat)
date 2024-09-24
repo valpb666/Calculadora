@@ -139,6 +139,8 @@ public class InfijoAPosfijo {
 
     public static double evaluaPostfijo(ArrayList<String> postfijo) {
 
+//checar aqui que si encuentra un ? lo tome como negativo y multiplique el numero después de eso por -1
+
         PilaA<Double> pila = new PilaA(100);
         double n1,n2;
         int i = 0;
@@ -160,7 +162,7 @@ public class InfijoAPosfijo {
                         break;
                     case "/":
                         if (n1 == 0) {
-                            bandera = false;
+                            throw new RuntimeException("Error: División entre cero.");
                         } else {
                             pila.push(n2 / n1);
                         }
