@@ -227,10 +227,10 @@ protected static boolean Error= false;
         });
        boton20.addActionListener((ActionEvent e) -> {
     String c = cuadroTexto.getText();
-    try {
-        // Convierte la expresión infija a postfijo
-        PilaADT<String> pilaPostfija = InfijoAPostfijo.conviertePostfijo(c); //clase que utilice junto con metodo solo para probar el codigo, manda solo syntax error
-
+       if(verificaExp(c)){
+           double res= infijoPosfijEval(c); //conectar con los metodos de david y de nat
+           cuadroTexto.setText("res");
+       }
         if (!Error) { // Verifica si no hay error de sintaxis
             try {
                 // Evalúa la expresión postfija
