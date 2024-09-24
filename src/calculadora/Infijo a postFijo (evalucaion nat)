@@ -187,33 +187,6 @@ public class InfijoAPosfijo {
      * @param args
      */
     public static void main(String[] args) {
-        //Checando metodos auxiliares: Jerarquia
-        System.out.println("Jerarquia: " + jerarquia("a"));
-        System.out.println("Jerarquia: " + jerarquia("*"));
-        System.out.println("Jerarquia: " + jerarquia("/"));
-        System.out.println("Jerarquia: " + jerarquia("-"));
-        System.out.println("Jerarquia: " + jerarquia("^"));
-        System.out.println("Jerarquia: " + jerarquia("+"));
-        System.out.println("Jerarquia: " + jerarquia("("));
-        //Checando boolean de operador
-        System.out.println("Checando si es operador signo : " + checarOperador(""));
-        //Checnado boolean de operador en caso de ser número
-        System.out.println("Checando si es operador número 1: " + checarOperador("1"));
-        //Checando el resto de los operadores para que de true el método auxiliar para checar operador
-        System.out.println("Checando si es operador signo +: " + checarOperador("+"));
-        System.out.println("Checando si es operador signo -: " + checarOperador("-"));
-        System.out.println("Checando si es operador signo /: " + checarOperador("/"));
-        System.out.println("Checando si es operador signo -: " + checarOperador("^"));
-        //Checar si una letra la toma como no operador
-        System.out.println("Checando si es operador letra a: " + checarOperador("a"));
-        System.out.println("Checando si es operador si está vacío: " + checarOperador(""));
-        //Checar si un numero negativo lo puede confundir como operador de resta
-        System.out.println("Checando si es operador número negativo -2: " + checarOperador("-2"));
-        //Checando boolean de paréntesis
-        System.out.println("Probando método para checar si es paréntesis '(': " + parentesis("("));
-        System.out.println("Probando método para checar si es paréntesis ')': " + parentesis(")"));
-        System.out.println("Probando método para checar si es paréntesis el número 1: " + parentesis("1"));
-        System.out.println("Probando método para checar si es paréntesis String vacío: " + parentesis(""));
         //Checando programa postfijo
         ArrayList<String> array = new ArrayList();
         array.add("a");
