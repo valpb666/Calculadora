@@ -231,7 +231,7 @@ public class Calculadora {
                         double digito1 = pila.pop();
                         double digito2 = pila.pop();
                         if(digito1==0){
-                            new RuntimeException("Error: División entre cero");
+                            throw new RuntimeException("Error: División entre cero");
                         }else
                         pila.push(digito2/digito1);
                         break;
