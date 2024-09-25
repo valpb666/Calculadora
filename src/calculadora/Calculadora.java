@@ -74,7 +74,7 @@ public class Calculadora {
 
                 case '*':
                 case '/':
-                case '#':  // Potencia
+                case '^':  // Potencia
                     if (!operadorValido(expresion, i, c == '/')) // Si es '/' se valida también la división entre 0 
                         esValido = false;
                   
@@ -134,7 +134,7 @@ public class Calculadora {
                 || expresion.charAt(pos - 1) == '+'
                 || expresion.charAt(pos - 1) == '-'
                 || expresion.charAt(pos - 1) == '*'
-                || expresion.charAt(pos - 1) == '#';
+                || expresion.charAt(pos - 1) == '^';
 
         validaDer = pos < expresion.length() - 1 && (Character.isDigit(expresion.charAt(pos + 1))
                 || (expresion.charAt(pos + 1) == '.' && pos + 2 < expresion.length() && Character.isDigit(expresion.charAt(pos + 2))));
