@@ -4,12 +4,15 @@
  */
 package calculadora;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author valen
  */
 public class Calculadora {
-     public boolean verificarExp(String expresion) {
+    
+     public static boolean verificarExp(String expresion) {
         boolean resp = false;
         boolean parentesis = false;
         boolean operadores = false;
@@ -24,7 +27,7 @@ public class Calculadora {
         return resp;
     }
 
-    private boolean validaParentesis(String expresion) {
+    private static boolean validaParentesis(String expresion) {
         boolean balanceado;
         int i = 0;
         balanceado = true;
@@ -49,7 +52,7 @@ public class Calculadora {
         return balanceado && pilaAux.isEmpty();
     }
 
-    private boolean validaOperadores(String expresion) {
+    private static boolean validaOperadores(String expresion) {
         boolean esValido = true;
         int i = 0;
 
@@ -92,7 +95,7 @@ public class Calculadora {
     }
 
 // Verifica que el punto decimal esté rodeado por dígitos
-    private boolean puntoValido(String expresion, int pos) {
+    private static boolean puntoValido(String expresion, int pos) {
         boolean digitoIzquierda, digitoDerecha;
 
         digitoIzquierda = pos > 0 && Character.isDigit(expresion.charAt(pos - 1));
@@ -102,7 +105,7 @@ public class Calculadora {
     }
 
     // Verifica que multiplicacion, division y potencia sean validos
-    private boolean operadorValido(String expresion, int pos, boolean esDivision) {
+    private static boolean operadorValido(String expresion, int pos, boolean esDivision) {
         // Verificar que haya un dígito o paréntesis a la izquierda y derecha del operador
         boolean validoIzq, validoDer;
 
@@ -123,7 +126,7 @@ public class Calculadora {
         return validoIzq && validoDer;
     }
 
-    private boolean negativoValido(String expresion, int pos) {
+    private static boolean negativoValido(String expresion, int pos) {
         boolean validaIzq, validaDer;
 
         validaIzq = pos == 0
@@ -140,7 +143,7 @@ public class Calculadora {
     }
 
     // Verifica que suma y resta sean válidos
-    private boolean sumaRestaValido(String expresion, int pos) {
+    private static boolean sumaRestaValido(String expresion, int pos) {
         boolean validoIzq, validoDer;
         validoIzq = pos > 0 && (Character.isDigit(expresion.charAt(pos - 1)) || expresion.charAt(pos - 1) == ')');
         validoDer = pos < expresion.length() - 1 && (Character.isDigit(expresion.charAt(pos + 1))
@@ -148,42 +151,6 @@ public class Calculadora {
 
         return validoDer && validoIzq;
     }
-}
-    
-    /*
-    // Verifica que multiplicacion, division y potencia sean validos
-    private boolean operadorValido1(String expresion, int pos, boolean esDivision) {
-        // Verificar que haya un dígito o paréntesis a la izquierda y derecha del operador
-        boolean validoIzq, validoDer;
-     
-        validoIzq = pos > 0 && (Character.isDigit(expresion.charAt(pos - 1)) || expresion.charAt(pos - 1) == ')');
-       
-        validoDer = pos < expresion.length() - 1 && (Character.isDigit(expresion.charAt(pos + 1)) || expresion.charAt(pos + 1) == '(' );
-    
-        // Si es una división, además de lo anterior, verificar si divide entre 0
-        if (esDivision)  
-            if (pos < expresion.length() - 1 && expresion.charAt(pos + 1) == '0'){
-                // Verificar si después del 0 hay un punto decimal o más dígito
-                if(pos + 2 < expresion.length()){
-                    validoDer=(expresion.charAt(pos + 2) == '.' && pos+2<expresion.length()-1 && Character.isDigit(expresion.charAt(pos + 3))&& expresion.charAt(pos + 3)!='0') || Character.isDigit(expresion.charAt(pos + 2));
-                    if(!validoDer && pos+2<expresion.length()-1 && Character.isDigit(expresion.charAt(pos + 3))){
-                        int i=pos+3;
-                        char elemento=expresion.charAt(i);
-                        while(elemento=='0' && i<expresion.length()){
-                            if(Character.isDigit(elemento))
-                                validoDer=true;
-                            i++;
-                            if(i<expresion.length())
-                                elemento=expresion.charAt(i);
-                        }
-                    }
-                }
-            }
-                           
-        return validoIzq && validoDer;
-    }
-    
-    */
     /**
      * Método auxiliar para asignar el valor de los operadores y obtener una
      * jerarquía
@@ -193,9 +160,8 @@ public class Calculadora {
      * <pre>
      * @param operador String
      * @return int valor asignado al operador
-     */
-    
-    private int jerarquia(String operador) {
+     */
+    private static int jerarquia(String operador) {
         int jerarquia = 0;
         switch (operador) {
             case "*": //Tanto la multiplicacion como la división son de la misma jerarquía 
@@ -222,63 +188,137 @@ public class Calculadora {
         }
         return jerarquia;
     }
-    
-    
-    private double evaluarExp(PilaADT<String> postfijo){ //Estamos asumiendo que la pila esta volteada, es decir si tenemos a*b asumimos que el postfijo esta así: * b a
-        PilaADT<Double> pila = new PilaA<>();
-        
-        while(!postfijo.isEmpty()){
-            String elemento = postfijo.pop();
-            
-            try {
-                double numero=Double.parseDouble(elemento);
-                pila.push(numero);
-            } catch(NumberFormatException e){
-                //checar negativos
-                switch(elemento){
-                    case "+" -> {
-                        double digito1,digito2;
-                        digito1=pila.pop();
-                        digito2=pila.pop();
-                        pila.push(digito1+digito2);
-                        break;
+
+ /**
+	     * Método auxiliar para revisar si el String es operador
+	     *
+	     * @param c String
+	     * @return boolean <ul>
+	     * <li> true: si es un operador "+","-","*","/","^"
+	     * <li> false: si no es un operador
+	     * <ul>
+	     */
+
+	    private static boolean checarOperador(String c) {
+	        boolean resp = false;
+	        if (c.equals("+") || c.equals("-") || c.equals("*") || c.equals("/") || c.equals("^")) {
+	            resp = true;
+	        }
+	        return resp;
+	    }
+
+	    /**
+	     * Método auxiliar para revisar si el String es un paréntesis
+	     *
+	     * @param c String
+	     * @return boolean <ul>
+	     * <li> true: si el String es "(" o ")"
+	     * <li> false: si el String no es "(" o ")"
+	     * <ul>
+	     */
+	    private static boolean parentesis(String c) {
+	        boolean resp = false;
+	        if (c.equals("(") || c.equals(")")) {
+	            resp = true;
+	        }
+	        return resp;
+	    }
+
+    /**
+     * Método para convertir una expresión en String de infijo a postfijo
+     *
+     * @param infijo El ArrayList en el que está guardada la expresión en infijo
+     * como escrita por el cliente
+     * @return ArrayList de String: expresión convertida a postfijo
+     * @see parentesis
+     * @see checarOperador
+     */
+
+    public static ArrayList<String> conviertePostfijo(ArrayList<String> infijo) {
+        PilaA<String> pila = new PilaA(100);  //Pila en donde guarda los operadores
+        ArrayList<String> postfijo = new ArrayList(); //ArrayList del resultado
+        String c;
+        for (int i = 0; i < infijo.size(); i++) {
+            c = infijo.get(i);
+            if (checarOperador(c)) { //Si el char es un operador revisa la jerarquia de pila.peek() y saca o mete de la pila
+                while (!pila.isEmpty() && jerarquia(pila.peek()) >= jerarquia(c)) {
+                    postfijo.add(pila.pop());
+                }
+                pila.push(c);
+            }
+            if (!checarOperador(c) && !parentesis(c)) //Si no es operador o parentesis, agrega al ArrayList postfijo
+            {
+                postfijo.add(c);
+            } else {
+                if (c.equals("(")) //Agrega a la pila directo
+                {
+                    pila.push(c);
+                }
+                if (c.equals(")")) {
+                    while (!pila.peek().equals("(")) //Saca todo de la pila hasta que no encuentre el parentesis abierto
+                    {
+                        postfijo.add(pila.pop());
                     }
-                    case "-" -> {
-                        double digito1 = pila.pop();
-                        double digito2 = pila.pop();
-                        pila.push(digito2-digito1);
-                        break;
-                    }
-                    case "*" -> {
-                        double digito1 = pila.pop();
-                        double digito2 = pila.pop();
-                        pila.push(digito1*digito2);
-                        break;
-                    }
-                    case "/" -> {
-        
-                        double digito1 = pila.pop();
-                        double digito2 = pila.pop();
-                        if(digito1==0){
-                            throw new RuntimeException("Error: División entre cero");
-                        }else
-                        pila.push(digito2/digito1);
-                        break;
-                    }
-                    case "^" -> {
-                        double digito1 = pila.pop();
-                        double digito2 = pila.pop();
-                        pila.push(Math.pow(digito2, digito1));
-                        break;
-                    }
-                    default -> {
-                        break;
-                    }
+                    pila.pop();
                 }
             }
+        } //Una vez que se termino de revisar el ArrayList infijo, vacia la pila de operadores
+        while (!pila.isEmpty()) {
+            postfijo.add(pila.pop());
         }
-        
-        return pila.peek();
+        return postfijo;
     }
-    
+
+    /**
+     * Método para evaluar una expresión en postfijo
+     * <pre>
+     * Toma una expresión en postfijo y a través de pilas evalúa las operaciones
+     * A través de un switch se identifica al operador y asigna la operación a realizar correspondiente
+     * La única operación restringida es la división por cero a través de una bandera
+     * <pre>
+     * @param postfijo ArrayList de la expresión infija convertida a posfija
+     * @return Double: resultado final de la operación ingresada por el usuario
+     * @see checarOperador
+     */
+
+    public static double evaluaPostfijo(ArrayList<String> postfijo) {
+
+        PilaA<Double> pila = new PilaA(100);
+        double n1,n2;
+        int i = 0;
+        boolean bandera = true;
+        String c;
+        while (i < postfijo.size() && bandera) {
+            c = postfijo.get(i);
+            if (!checarOperador(c)) {
+                pila.push(Double.parseDouble(c));
+            } else {
+                n1 = pila.pop();
+                n2 = pila.pop();
+                switch (c) {
+                    case "+":
+                        pila.push(n1 + n2);
+                        break;
+                    case "-":
+                        pila.push(n2 - n1);
+                        break;
+                    case "/":
+                        if (n1 == 0) {
+                            throw new RuntimeException("SyntaxERROR");
+                        } else {
+                            pila.push(n2 / n1);
+                        }
+                        break;
+                    case "^":
+                        pila.push(Math.pow(n2, n1));
+                        break;
+                    default:
+                        pila.push(n1 * n2);
+                        break;
+                }
+            }
+            i++;
+        }
+        return pila.pop();
+    }  
 }
