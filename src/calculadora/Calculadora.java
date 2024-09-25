@@ -9,117 +9,146 @@ package calculadora;
  * @author valen
  */
 public class Calculadora {
-    public boolean verificarExp (String expresion) {
-        boolean resp = false; 
+     public boolean verificarExp(String expresion) {
+        boolean resp = false;
         boolean parentesis = false;
         boolean operadores = false;
-        
+
         parentesis = validaParentesis(expresion);
         operadores = validaOperadores(expresion);
-        
-        if(parentesis && operadores)
+
+        if (parentesis && operadores) {
             resp = true;
-        
+        }
+
         return resp;
-    } 
-    
-    private boolean validaParentesis (String expresion) {
+    }
+
+    private boolean validaParentesis(String expresion) {
         boolean balanceado;
         int i = 0;
         balanceado = true;
         PilaADT<Character> pilaAux = new PilaA<>();
         char c;
-                
+
         while (i < expresion.length() && balanceado) {
             c = expresion.charAt(i);
-            
-            if (c == '(' )
+
+            if (c == '(') {
                 pilaAux.push(c);
-            else if ( c == ')' )
-                if (pilaAux.isEmpty() || i == 0 || expresion.charAt(i - 1) == '(') 
+            } else if (c == ')') {
+                if (pilaAux.isEmpty() || i == 0 || expresion.charAt(i - 1) == '(') {
                     balanceado = false;  // No hay '(' que le corresponde
-                else
+                } else {
                     pilaAux.pop(); //Sacamos su '(' correspondiente
-            
+                }
+            }
             i++;
         }
-        
-       return balanceado && pilaAux.isEmpty();
+
+        return balanceado && pilaAux.isEmpty();
     }
-    
-    private boolean validaOperadores (String expresion) {
+
+    private boolean validaOperadores(String expresion) {
         boolean esValido = true;
         int i = 0;
-    
+
         while (i < expresion.length() && esValido) {
             char c = expresion.charAt(i);
-        
+
             switch (c) {
                 case '.':  // Punto decimal
                     if (!puntoValido(expresion, i)) 
                         esValido = false;
-                
                     break;
-                
+
                 case '+':
                 case '-':
-                    if(!sumaRestaValido(expresion, i))
+                    if (!sumaRestaValido(expresion, i)) 
                         esValido = false;
-                    break;
                     
+                    break;
+
                 case '*':
                 case '/':
                 case '#':  // Potencia
-                    if (!operadorValido(expresion, i, c == '/'))   // Si es '/' se valida también la división entre 0
+                    if (!operadorValido(expresion, i, c == '/')) // Si es '/' se valida también la división entre 0 
+                        esValido = false;
+                  
+                    break;
+
+                case '?': // Signo para numero negativo 
+                    if (!negativoValido(expresion, i)) 
                         esValido = false;
                     break;
-                
+
                 default:
                     break;
             }
-        
+
             i++;
         }
-    return esValido;
-}
+        return esValido;
+    }
 
 // Verifica que el punto decimal esté rodeado por dígitos
     private boolean puntoValido(String expresion, int pos) {
         boolean digitoIzquierda, digitoDerecha;
-    
-        digitoIzquierda = pos > 0 && Character.isDigit(expresion.charAt(pos - 1)); 
+
+        digitoIzquierda = pos > 0 && Character.isDigit(expresion.charAt(pos - 1));
         digitoDerecha = pos < expresion.length() - 1 && Character.isDigit(expresion.charAt(pos + 1));
-    
+
         return digitoIzquierda && digitoDerecha;
     }
-    
+
     // Verifica que multiplicacion, division y potencia sean validos
     private boolean operadorValido(String expresion, int pos, boolean esDivision) {
         // Verificar que haya un dígito o paréntesis a la izquierda y derecha del operador
         boolean validoIzq, validoDer;
-     
-        
+
         validoIzq = pos > 0 && (Character.isDigit(expresion.charAt(pos - 1)) || expresion.charAt(pos - 1) == ')');
-       
-        validoDer = pos < expresion.length() - 1 && (Character.isDigit(expresion.charAt(pos + 1)) || expresion.charAt(pos + 1) == '(' );
-        
+        validoDer = pos < expresion.length() - 1 && (Character.isDigit(expresion.charAt(pos + 1)) || expresion.charAt(pos + 1) == '(' || expresion.charAt(pos + 1) == '?');
+
         // Si es una división, además de lo anterior, verificar si divide entre 0
-        if (esDivision)   
-            if (pos < expresion.length() - 1 && expresion.charAt(pos + 1) == '0') 
-                // Verificar si después del 0 hay un punto decimal o más dígitos
-                validoDer = pos + 2 < expresion.length() && (expresion.charAt(pos + 2) == '.' || Character.isDigit(expresion.charAt(pos + 2))); // División entre 0
-                           
+        if (esDivision && pos < expresion.length() - 1) {
+            int j = pos + 1;
+            
+            while (j < expresion.length() && (Character.isDigit(expresion.charAt(j)) || expresion.charAt(j) == '.' || expresion.charAt(j) == '?'))
+                j++;
+
+            if (expresion.charAt(j-1) == '0')
+                validoDer = false;
+        }
+        
         return validoIzq && validoDer;
     }
-    
-    //Verifica que suma y resta sean validos
-    private boolean sumaRestaValido (String expresion, int pos) {
+
+    private boolean negativoValido(String expresion, int pos) {
+        boolean validaIzq, validaDer;
+
+        validaIzq = pos == 0
+                || expresion.charAt(pos - 1) == '/'
+                || expresion.charAt(pos - 1) == '+'
+                || expresion.charAt(pos - 1) == '-'
+                || expresion.charAt(pos - 1) == '*'
+                || expresion.charAt(pos - 1) == '#';
+
+        validaDer = pos < expresion.length() - 1 && (Character.isDigit(expresion.charAt(pos + 1))
+                || (expresion.charAt(pos + 1) == '.' && pos + 2 < expresion.length() && Character.isDigit(expresion.charAt(pos + 2))));
+
+        return validaIzq && validaDer;
+    }
+
+    // Verifica que suma y resta sean válidos
+    private boolean sumaRestaValido(String expresion, int pos) {
         boolean validoIzq, validoDer;
         validoIzq = pos > 0 && (Character.isDigit(expresion.charAt(pos - 1)) || expresion.charAt(pos - 1) == ')');
-        validoDer  = pos < expresion.length() - 1 && (Character.isDigit(expresion.charAt(pos + 1)) || expresion.charAt(pos + 1) == '(' || expresion.charAt(pos + 1) == '?');
-        
+        validoDer = pos < expresion.length() - 1 && (Character.isDigit(expresion.charAt(pos + 1))
+                || expresion.charAt(pos + 1) == '(' || expresion.charAt(pos + 1) == '?');
+
         return validoDer && validoIzq;
     }
+}
     
     /*
     // Verifica que multiplicacion, division y potencia sean validos
