@@ -11,7 +11,14 @@ import java.util.ArrayList;
  * @author valen
  */
 public class Calculadora {
-    
+    /*
+    Metodo que comprueba la correcta sintaxis de la expresion dada por el usuario
+    @param String expresion
+    @return boolean. Dictamina si la expresión puede convertirse y evaluarse
+    Utiliza los métodos de validaParentesis y validaOperadores, igualmente, tienen el mismo paramétro que el principal y regresasn igualmente un boolean. 
+    Necesita de un boolean verdadero de ambos métodos para el caso de éxito. 
+    validaOperadores cuanta con más submetodos que se explicaran después 
+    */
      public static boolean verificarExp(String expresion) {
         boolean resp = false;
         boolean parentesis = false;
@@ -26,7 +33,17 @@ public class Calculadora {
 
         return resp;
     }
-
+	/*
+	Metodo auxiliar privado a verificarExp(string) que comprueba el correcto uso de parentesis en la expresión 
+ 	@param String expresion
+  	@return boolean 
+	Los casos que proveemos para dictaminar que el uso de parentesis es correcto:
+ 	1. Parentesis balanceados 
+  	2. Parentesis no vacios
+   	Se iterara en la expresion hasta su final o hasta que una bandera nos determine que la expresión ya no es valida según los casos establecidos anteriormente.
+    	Se hace uso de una estructura tipo pila y de un switch. 
+     	Para su éxito debe de encontrarese vacía la pila, ademas, de que la bandera debe mantenerse en true
+	*/
     private static boolean validaParentesis(String expresion) {
         boolean balanceado;
         int i = 0;
@@ -52,6 +69,13 @@ public class Calculadora {
         return balanceado && pilaAux.isEmpty();
     }
 
+	/*
+	Metodo auxiliar a verificarExp que comprueba el uso correcto de sus distintos operadores, y terminos decimales y negativos. 
+ 	@param String expresion
+  	@return boolean. Determinado por el valor de la variable boolean esValido
+   	Hara uso de los metodos auxiliares: puntoValido(String, int), operadorValido(String, int, boolean), negativoValido(String, int)
+    	Iterara por toda la expresion, hasta que termine o que la bandera esValido sea false
+ 	*/
     private static boolean validaOperadores(String expresion) {
         boolean esValido = true;
         int i = 0;
@@ -67,11 +91,6 @@ public class Calculadora {
 
                 case '+':
                 case '-':
-                    if (!sumaRestaValido(expresion, i)) 
-                        esValido = false;
-                    
-                    break;
-
                 case '*':
                 case '/':
                 case '^':  // Potencia
@@ -94,7 +113,12 @@ public class Calculadora {
         return esValido;
     }
 
-// Verifica que el punto decimal esté rodeado por dígitos
+/* 
+Metodo aux. a validaOperadores(String).
+@param String expresion, int pos
+@return boolean. 
+Verifica que el punto decimal esté rodeado por dígitos
+*/
     private static boolean puntoValido(String expresion, int pos) {
         boolean digitoIzquierda, digitoDerecha;
 
@@ -104,7 +128,12 @@ public class Calculadora {
         return digitoIzquierda && digitoDerecha;
     }
 
-    // Verifica que multiplicacion, division y potencia sean validos
+    /* 
+    Metodo aux. a validaOperadores(String).
+    @param String expresion, int pos, boolean esDivision
+    @return boolean. 
+    Verifica que los operadores sean validos, que esten entre parentesis o terminos
+    */
     private static boolean operadorValido(String expresion, int pos, boolean esDivision) {
         // Verificar que haya un dígito o paréntesis a la izquierda y derecha del operador
         boolean validoIzq, validoDer;
@@ -112,7 +141,7 @@ public class Calculadora {
         validoIzq = pos > 0 && (Character.isDigit(expresion.charAt(pos - 1)) || expresion.charAt(pos - 1) == ')');
         validoDer = pos < expresion.length() - 1 && (Character.isDigit(expresion.charAt(pos + 1)) || expresion.charAt(pos + 1) == '(' || expresion.charAt(pos + 1) == '?');
 
-        // Si es una división, además de lo anterior, verificar si divide entre 0
+        // Si es una división, además de lo anterior, verificar si divide entre 0. Tener en cuenta casos donde directamente este dividendo con 0, pero aceptar casos como 5/0.00029
         if (esDivision && pos < expresion.length() - 1) {
             int j = pos + 1;
             
@@ -125,7 +154,13 @@ public class Calculadora {
         
         return validoIzq && validoDer;
     }
-
+	/* 
+    Metodo aux. a validaOperadores(String).
+    @param String expresion, int pos
+    @return boolean. 
+    Verifica que el termino negativo sea valido, osea, que sea != 0
+    Tener en cuenta los casos como 0000014, ya que sigue siendo valido, parecido al caso de la division 
+    */
     private static boolean negativoValido(String expresion, int pos) {
         boolean validaIzq, validaDer;
 
@@ -142,15 +177,6 @@ public class Calculadora {
         return validaIzq && validaDer;
     }
 
-    // Verifica que suma y resta sean válidos
-    private static boolean sumaRestaValido(String expresion, int pos) {
-        boolean validoIzq, validoDer;
-        validoIzq = pos > 0 && (Character.isDigit(expresion.charAt(pos - 1)) || expresion.charAt(pos - 1) == ')');
-        validoDer = pos < expresion.length() - 1 && (Character.isDigit(expresion.charAt(pos + 1))
-                || expresion.charAt(pos + 1) == '(' || expresion.charAt(pos + 1) == '?');
-
-        return validoDer && validoIzq;
-    }
     /**
      * Método auxiliar para asignar el valor de los operadores y obtener una
      * jerarquía
