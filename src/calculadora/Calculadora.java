@@ -307,7 +307,7 @@ Verifica que el punto decimal esté rodeado por dígitos
      * @see checarOperador
      */
 
-    public static double evaluaPostfijo(ArrayList<String> postfijo) {
+   public static double evaluaPostfijo(ArrayList<String> postfijo) {
 
         PilaA<Double> pila = new PilaA(100);
         double n1,n2;
@@ -330,7 +330,9 @@ Verifica que el punto decimal esté rodeado por dígitos
                         break;
                     case "/":
                         if (n1 == 0) {
-                            throw new RuntimeException("SyntaxERROR");
+                            // Si intentamos dividir por cero, en lugar de lanzar una excepción,
+                            // devolvemos Double.NaN (Not-a-Number) para indicar un error en la operación.
+                            return Double.NaN;
                         } else {
                             pila.push(n2 / n1);
                         }
@@ -347,4 +349,3 @@ Verifica que el punto decimal esté rodeado por dígitos
         }
         return pila.pop();
     }  
-}
