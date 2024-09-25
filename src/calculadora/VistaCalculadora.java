@@ -531,6 +531,7 @@ public class VistaCalculadora extends javax.swing.JFrame {
     }//GEN-LAST:event_parentesisDerActionPerformed
 
     private void igualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_igualActionPerformed
+        private void igualActionPerformed(java.awt.event.ActionEvent evt) {                                      
         // TODO add your handling code here:
         String expresion=campoTexto.getText();
         if(Calculadora.verificarExp(expresion)){
@@ -552,14 +553,16 @@ public class VistaCalculadora extends javax.swing.JFrame {
                 }
             }
             if(!numero.equals(""))
-                texto.add(numero); //En caso de que el hubiera un número al final, lo añade
-            
-            campoTexto.setText(Calculadora.evaluaPostfijo(Calculadora.conviertePostfijo(texto))+"");
+                texto.add(numero); //En caso de que hubiera un número al final, lo añade
+            double resultado=Calculadora.evaluaPostfijo(Calculadora.conviertePostfijo(texto));
+            if(resultado==Double.NaN)
+                campoTexto.setText("Syntax ERROR");
+            else
+                campoTexto.setText(resultado+"");
             
         } else
             campoTexto.setText("Syntax ERROR");
-            
-            
+        
     }//GEN-LAST:event_igualActionPerformed
 
     private void sumaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sumaActionPerformed
