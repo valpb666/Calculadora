@@ -496,6 +496,8 @@ public class VistaCalculadora extends javax.swing.JFrame {
 
     private void negativoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_negativoActionPerformed
         // TODO add your handling code here:
+        String texto=campoTexto.getText();
+        campoTexto.setText(texto+"?");
     }//GEN-LAST:event_negativoActionPerformed
 
     private void jButton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton0ActionPerformed
