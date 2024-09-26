@@ -11,14 +11,19 @@ import java.util.ArrayList;
  * @author valen
  */
 public class Calculadora {
-    /*
-    Metodo que comprueba la correcta sintaxis de la expresion dada por el usuario
-    @param String expresion
-    @return boolean. Dictamina si la expresión puede convertirse y evaluarse
-    Utiliza los métodos de validaParentesis y validaOperadores, igualmente, tienen el mismo paramétro que el principal y regresasn igualmente un boolean. 
-    Necesita de un boolean verdadero de ambos métodos para el caso de éxito. 
-    validaOperadores cuanta con más submetodos que se explicaran después 
-    */
+/**
+ * Verifica la validez de una expresión basada en dos criterios:
+ * 1. La expresión tiene paréntesis correctamente balanceados.
+ * 2. La expresión contiene operadores válidos.
+ * 
+ * Este método llama a dos métodos auxiliares:
+ * {@link #validaParentesis(String)} - verifica si los paréntesis en la expresión están balanceados.
+ * {@link #validaOperadores(String)} - verifica si los operadores en la expresión son válidos.
+ * 
+ * @param expresion La representación en cadena de la expresión a verificar.
+ * @return {@code true} si la expresión tiene paréntesis balanceados y operadores válidos,
+ *         de lo contrario, {@code false}.
+ */
      public static boolean verificarExp(String expresion) {
         boolean resp = false;
         boolean parentesis = false;
@@ -33,17 +38,21 @@ public class Calculadora {
 
         return resp;
     }
-	/*
-	Metodo auxiliar privado a verificarExp(string) que comprueba el correcto uso de parentesis en la expresión 
- 	@param String expresion
-  	@return boolean 
-	Los casos que proveemos para dictaminar que el uso de parentesis es correcto:
- 	1. Parentesis balanceados 
-  	2. Parentesis no vacios
-   	Se iterara en la expresion hasta su final o hasta que una bandera nos determine que la expresión ya no es valida según los casos establecidos anteriormente.
-    	Se hace uso de una estructura tipo pila y de un switch. 
-     	Para su éxito debe de encontrarese vacía la pila, ademas, de que la bandera debe mantenerse en true
-	*/
+/**
+ * Verifica si los paréntesis en una expresión están correctamente balanceados.
+ * 
+ * Este método utiliza una pila auxiliar para asegurarse de que cada paréntesis 
+ * de apertura '(' tenga un paréntesis de cierre ')' correspondiente en el orden correcto.
+ * 
+ * Reglas:
+ * - Cada paréntesis de apertura debe tener un cierre correspondiente.
+ * - No puede haber un paréntesis de cierre sin un paréntesis de apertura anterior.
+ * - Los paréntesis no pueden estar desequilibrados (más de un tipo sin su contraparte).
+ * 
+ * @param expresion La expresión a analizar, representada como una cadena de caracteres.
+ * @return {@code true} si los paréntesis están correctamente balanceados, 
+ *         {@code false} en caso contrario.
+ */
     private static boolean validaParentesis(String expresion) {
         boolean balanceado;
         int i = 0;
@@ -69,13 +78,23 @@ public class Calculadora {
         return balanceado && pilaAux.isEmpty();
     }
 
-	/*
-	Metodo auxiliar a verificarExp que comprueba el uso correcto de sus distintos operadores, y terminos decimales y negativos. 
- 	@param String expresion
-  	@return boolean. Determinado por el valor de la variable boolean esValido
-   	Hara uso de los metodos auxiliares: puntoValido(String, int), operadorValido(String, int, boolean), negativoValido(String, int)
-    	Iterara por toda la expresion, hasta que termine o que la bandera esValido sea false
- 	*/
+/**
+ * Verifica si los operadores en una expresión son válidos.
+ * 
+ * Este método evalúa los operadores aritméticos y otros símbolos en la expresión para asegurar que:
+ * - Los operadores aritméticos (+, -, *, /, ^) estén correctamente ubicados y utilizados.
+ * - El punto decimal (.) esté colocado de manera válida en los números.
+ * - El signo de número negativo (?) esté correctamente posicionado.
+ * - En el caso de la división (/), verifica que no se intente dividir entre 0.
+ * 
+ * Este método utiliza tres funciones auxiliares:
+ * {@link #puntoValido(String, int)} - verifica si el punto decimal está correctamente posicionado.
+ * {@link #operadorValido(String, int, boolean)} - verifica si un operador aritmético está bien colocado.
+ * {@link #negativoValido(String, int)} - verifica si el signo para un número negativo está bien utilizado.
+ * 
+ * @param expresion La expresión a analizar, representada como una cadena de caracteres.
+ * @return {@code true} si los operadores son válidos, {@code false} en caso contrario.
+ */
     private static boolean validaOperadores(String expresion) {
         boolean esValido = true;
         int i = 0;
@@ -113,12 +132,18 @@ public class Calculadora {
         return esValido;
     }
 
-/* 
-Metodo aux. a validaOperadores(String).
-@param String expresion, int pos
-@return boolean. 
-Verifica que el punto decimal esté rodeado por dígitos
-*/
+/**
+ * Verifica si el punto decimal ('.') está correctamente colocado dentro de la expresión.
+ * 
+ * El punto decimal es válido si está rodeado por dígitos numéricos a ambos lados:
+ * - Debe haber un dígito antes del punto.
+ * - Debe haber un dígito después del punto.
+ * 
+ * @param expresion La expresión que contiene el punto decimal, representada como una cadena de caracteres.
+ * @param pos La posición del punto en la cadena de la expresión.
+ * @return {@code true} si el punto está correctamente ubicado entre dígitos, 
+ *         {@code false} si no hay un dígito a la izquierda o a la derecha del punto.
+ */
     private static boolean puntoValido(String expresion, int pos) {
         boolean digitoIzquierda, digitoDerecha;
 
@@ -128,12 +153,24 @@ Verifica que el punto decimal esté rodeado por dígitos
         return digitoIzquierda && digitoDerecha;
     }
 
-    /* 
-    Metodo aux. a validaOperadores(String).
-    @param String expresion, int pos, boolean esDivision
-    @return boolean. 
-    Verifica que los operadores sean validos, que esten entre parentesis o terminos
-    */
+/**
+ * Verifica si un operador aritmético está correctamente ubicado dentro de la expresión.
+ * 
+ * Para que un operador sea válido:
+ * - Debe haber un dígito o un paréntesis de cierre ')' a la izquierda del operador.
+ * - Debe haber un dígito, un paréntesis de apertura '(', o un signo para número negativo '?' a la derecha del operador.
+ * 
+ * Si el operador es una división ('/'), además se verifica que no divida entre 0:
+ * - Acepta divisiones con números cercanos a 0, como 5/0.00029.
+ * - No permite divisiones que resulten en un divisor igual a 0.
+ * 
+ * @param expresion La expresión que contiene el operador, representada como una cadena de caracteres.
+ * @param pos La posición del operador en la cadena de la expresión.
+ * @param esDivision Indica si el operador es una división ('/'). Si es {@code true}, 
+ *        se realizará una verificación adicional para evitar divisiones entre 0.
+ * @return {@code true} si el operador está correctamente ubicado, 
+ *         {@code false} si no cumple con las reglas de validez.
+ */
     private static boolean operadorValido(String expresion, int pos, boolean esDivision) {
         // Verificar que haya un dígito o paréntesis a la izquierda y derecha del operador
         boolean validoIzq, validoDer;
@@ -154,13 +191,21 @@ Verifica que el punto decimal esté rodeado por dígitos
         
         return validoIzq && validoDer;
     }
-	/* 
-    Metodo aux. a validaOperadores(String).
-    @param String expresion, int pos
-    @return boolean. 
-    Verifica que el termino negativo sea valido, osea, que sea != 0
-    Tener en cuenta los casos como 0000014, ya que sigue siendo valido, parecido al caso de la division 
-    */
+/**
+ * Verifica si el signo de número negativo ('?') está correctamente ubicado dentro de la expresión.
+ * 
+ * Un signo de número negativo es válido si:
+ * - Está al inicio de la expresión o precedido por un operador aritmético (+, -, *, /, ^).
+ * - Está seguido por un dígito o por un punto decimal (.) que tenga un dígito inmediatamente después.
+ * 
+ * Este método se utiliza para garantizar que el signo de número negativo esté correctamente posicionado
+ * y no se encuentre en lugares inválidos dentro de la expresión.
+ * 
+ * @param expresion La expresión que contiene el signo negativo, representada como una cadena de caracteres.
+ * @param pos La posición del signo negativo en la cadena de la expresión.
+ * @return {@code true} si el signo negativo está correctamente ubicado, 
+ *         {@code false} si no cumple con las reglas de validez.
+ */
     private static boolean negativoValido(String expresion, int pos) {
         boolean validaIzq, validaDer;
 
