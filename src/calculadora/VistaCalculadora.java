@@ -598,7 +598,7 @@ public class VistaCalculadora extends javax.swing.JFrame {
         int i=texto.length()-1;
         
         while(i>=0 && Character.isDigit(texto.charAt(i))){ 
-            numero+=texto.charAt(i);
+            numero=texto.charAt(i)+numero;
             i--;
         }
         
